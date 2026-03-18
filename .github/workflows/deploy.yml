@@ -24,6 +24,7 @@ jobs:
           context: ./frontend
           push: true
           tags: hassan514/raahwaar-frontend:latest
+          no-cache: true
           build-args: |
             VITE_API_URL=${{ secrets.VITE_API_URL }}
       
