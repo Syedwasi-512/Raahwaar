@@ -1,0 +1,24 @@
+services:
+
+  frontend:
+    build: 
+      context: ./frontend
+      args:
+        - VITE_API_URL=${VITE_API_URL}
+    image: hassan514/raahwaar-frontend
+    ports:
+      - "80:80"
+    env_file:
+      - ./frontend/.env
+    depends_on:
+      - backend
+
+  backend:
+    build: ./backend
+    image: hassan514/raahwaar-backend
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./backend/.env
+
+   
