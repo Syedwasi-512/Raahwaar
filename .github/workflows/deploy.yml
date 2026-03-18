@@ -1,0 +1,51 @@
+name: Build and Push Docker Images
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Code Checkout karo
+        uses: actions/checkout@v3
+
+      - name: DockerHub login karo
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_NAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Frontend image banao or push karo
+        uses: docker/build-push-action@v5
+        with:
+          context: ./frontend
+          push: true
+          tags: hassan514/raahwaar-frontend:latest
+          build-args: |
+            VITE_API_URL=${{ secrets.VITE_API_URL }}
+      
+      - name: Backend image banao aur push karo
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          push: true
+          tags: hassan514/raahwaar-backend:latest
+
+      - name: Railway Backend Redeploy karo
+        run: |
+          curl -X POST \
+          -H "Authorization: Bearer ${{ secrets.RAILWAY_TOKEN }}" \
+          -H "Content-Type: application/json" \
+          -d '{"serviceId": "e148e3e1-3202-4c20-93b0-15ff65ae19c6"}' \
+          https://backboard.railway.app/graphql/v2
+
+      - name: Railway Frontend Redeploy karo
+        run: |
+          curl -X POST \
+          -H "Authorization: Bearer ${{ secrets.RAILWAY_TOKEN }}" \
+          -H "Content-Type: application/json" \
+          -d '{"serviceId": "0893c759-e0e0-4cd2-84ea-73d262db80a3"}' \
+          https://backboard.railway.app/graphql/v2
