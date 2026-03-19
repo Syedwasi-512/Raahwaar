@@ -105,12 +105,12 @@ app.use(errorHandler);
 // --- 5. SERVER EXECUTION ---
 
 // Vercel par 'app.listen' nahi chalta, sirf local development mein chalta hai
-if (process.env.NODE_ENV !== 'production') {
+
     const PORT = process.env.PORT || 5000;
     app.listen(PORT, () => {
         console.log(`🚀 Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
     });
-}
+
 
 // --- CRITICAL FOR VERCEL ---
 module.exports = app;
